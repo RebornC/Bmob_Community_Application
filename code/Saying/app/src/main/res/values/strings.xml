@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">语录</string>
+    <string name="verify_psw" >我们会即时向您的邮箱发送一封电子邮件。\n请点击邮件里的链接进入重置密码的网页。\n根据提示输入新密码，点击确认即可重置。</string>
+</resources>

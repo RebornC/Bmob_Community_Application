@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:padding="10dp"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<TextView
+		android:id="@+id/saying_id"
+		android:visibility="gone"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:gravity="center_vertical"
+		android:layout_height="30dp">
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/user_image"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:gravity="left"/>
+		<TextView
+			android:id="@+id/user_name"
+			android:text="Reborn"
+			android:textColor="@color/black"
+			android:layout_marginLeft="10dp"
+			android:layout_weight="1"
+			android:gravity="center_vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+		<TextView
+			android:id="@+id/create_time"
+			android:text="2017/1/31"
+			android:textColor="@color/colorBase2"
+			android:gravity="center_vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+
+	<android.support.constraint.ConstraintLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:background="@color/trans1"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp"
+		android:layout_marginTop="10dp"
+		android:gravity="center_vertical">
+		<TextView
+			android:id="@+id/saying_provenance"
+			android:textColor="@color/colorPrimary"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content" />
+		<ImageView
+			android:id="@+id/view"
+			android:background="@color/colorBase2"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/saying_provenance"
+			android:layout_marginTop="5dp"
+			android:layout_width="fill_parent"
+			android:layout_height="0.5dp" />
+		<TextView
+			android:id="@+id/saying_content"
+			android:text="content"
+			android:textColor="@color/colorBase2"
+			android:layout_marginTop="5dp"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/view"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:maxLines="3"
+			android:ellipsize="end" />
+
+	</android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>
+

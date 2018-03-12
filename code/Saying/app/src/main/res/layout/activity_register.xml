@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/colorPrimary"
+        android:src="@mipmap/img_2"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/nickName"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:hint="昵称"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:background="@drawable/shape_2"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_2"/>
+
+    <EditText
+        android:id="@+id/loginEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:hint="邮箱"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:background="@drawable/shape_2"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nickName"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:hint="密码"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:background="@drawable/shape_2"
+        android:inputType="textPassword"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginEmail"/>
+
+    <EditText
+        android:id="@+id/psw_again"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:hint="确认密码"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:background="@drawable/shape_2"
+        android:inputType="textPassword"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password"/>
+
+    <Button
+        android:id="@+id/signUp"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:text="注册"
+        android:textSize="15sp"
+        android:textColor="@color/colorBackground"
+        android:background="@drawable/shape_1"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/psw_again"/>
+
+
+
+
+</android.support.constraint.ConstraintLayout>

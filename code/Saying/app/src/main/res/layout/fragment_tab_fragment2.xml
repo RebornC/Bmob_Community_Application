@@ -1,0 +1,115 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    xmlns:tools="http://schemas.android.com/tools"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent"  >
+    <com.example.yc.saying.utils.VpSwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/colorPrimaryDark"
+        app:contentInsetStart="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <Button
+            android:id="@+id/search_button"
+            android:text="搜索你感兴趣的内容"
+            android:textColor="@color/colorBase3"
+            android:textSize="13sp"
+            android:drawableLeft="@drawable/ic_search_black_18dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="38dp"
+            android:background="@drawable/shape_10"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </Button>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--热门活动展示-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/page"
+                    android:background="@color/trans2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <!--小圆点-->
+                <LinearLayout
+                    android:id="@+id/live_indicator"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp">
+
+                </LinearLayout>
+            </FrameLayout>
+
+            <!--热门内容-->
+            <TextView
+                android:text="查看热门内容"
+                android:textColor="@color/colorBase3"
+                android:textSize="13sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <!--文章推荐-->
+            <TextView
+                android:text="文章推荐"
+                android:textColor="@color/colorBase3"
+                android:textSize="13sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ListView
+                android:id="@+id/listview"
+                android:dividerHeight="7dp"
+                android:divider="@color/colorBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </ListView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
+</com.example.yc.saying.utils.VpSwipeRefreshLayout>
+</FrameLayout> 
