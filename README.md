@@ -142,9 +142,9 @@ PS：点击进某条语录或某本笔记的详情页面里，如果系统判断
 但还是十分感激于此次短暂的独立开发经历，让我收获颇丰。其实最大的体会便是：思考规划比打代码更重要。当你设计好界面布局、UI交互、数据表的结构和关联性、以及实现思路和步骤时，再动手打代码时便能流畅许多，省去了很多发呆、陷入困惑的时间空隙。
 
 PS：代码已完整上传，不过为了保障后端云数据库的私密性，我将文件中的Application ID删除。
-
-![image](https://github.com/15331016/Bmob_Community_Application/raw/master/screenshots/24.png)
-
-
+```java
+//默认初始化Bmob
+Bmob.initialize(this, "Your Application ID");
+```
 
 2018/3/9
