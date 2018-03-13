@@ -19,7 +19,7 @@
 
 ![image](https://github.com/15331016/Bmob_Community_Application/raw/master/screenshots/database.jpg)
 
-##### 主要功能
+##### - 主要功能
 > * 发布并分享语录，可对自己的语录进行重新编辑，对他人的语录进行收藏。
 > * 创建特定主题的笔记本，将自己或他人相关的语录添至其中，从而进行归类整理。
 > * 「关注」- 随时看到关注的用户的最新语录动态。
