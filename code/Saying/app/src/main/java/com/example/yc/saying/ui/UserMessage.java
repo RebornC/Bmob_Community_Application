@@ -1,5 +1,10 @@
 package com.example.yc.saying.ui;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,11 +12,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
@@ -26,12 +33,14 @@ import android.widget.Toast;
 import com.example.yc.saying.R;
 import com.example.yc.saying.model._User;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -82,6 +91,17 @@ public class UserMessage extends AppCompatActivity {
     private static int output_XX = 480;
     private static int output_YY = 200;
 
+    // 2018/7/6尝试
+    // 用于接收图库选择或拍照完成后的结果回调
+    private static final int PHOTO_TK = 0; //图库
+    private static final int PHOTO_PZ = 1; //拍照
+    private static final int PHOTO_CLIP = 2; //裁剪
+
+    private Uri contentUri;
+    private Bitmap photo;
+    private OutputStream out;
+    private int temp = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +114,7 @@ public class UserMessage extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*
         switch (requestCode) {
             case CODE_GALLERY_REQUEST:
                 if (data != null) {
@@ -118,6 +139,62 @@ public class UserMessage extends AppCompatActivity {
             default:
                 break;
         }super.onActivityResult(requestCode, resultCode, data);
+        */
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PHOTO_PZ:
+                    Uri pictur;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//如果是7.0android系统
+                        pictur = contentUri;
+                    } else {
+                        pictur = Uri.fromFile(new File(
+                                Environment.getExternalStorageDirectory() + "/temp.jpg"));
+                    }
+                    startPhotoZoom(pictur);
+                    break;
+                case PHOTO_TK:
+                    startPhotoZoom(data.getData());
+                    break;
+                case PHOTO_CLIP:
+                    //裁剪后的图像转成BitMap
+                    try {
+                        photo = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //创建路径
+                    String path = Environment.getExternalStorageDirectory().getPath() + "/Pic";
+                    //获取外部储存目录
+                    File file = new File(path);
+                    Log.e("file", file.getPath());
+                    //创建新目录
+                    file.mkdirs();
+                    //以当前时间重新命名文件
+                    long i = System.currentTimeMillis();
+                    //生成新的文件
+                    img_uri = file.toString() + "/" + i + ".png";
+                    file = new File(file.toString() + "/" + i + ".png");
+                    Log.e("fileNew", file.getPath());
+                    //创建输出流
+                    try {
+                        out = new FileOutputStream(file.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //压缩文件
+                    boolean flag = photo.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    if (file.getName() != null || !file.getName().equals("")) {
+                        // 显示
+                        // Toast.makeText(getApplication(), img_uri, Toast.LENGTH_LONG).show();
+                        if (temp == 1) {
+                            uploadImage(img_uri);
+                        } else {
+                            uploadCoverPage(img_uri);
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     private void findView() {
@@ -193,9 +270,15 @@ public class UserMessage extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (arg2 == 0) {
                     //打开相册进行选择
+                    /*
                     Intent intent = new Intent("android.intent.action.GET_CONTENT");
                     intent.setType("image/*");
                     startActivityForResult(intent, CODE_GALLERY_REQUEST);
+                    */
+                    temp = 1;
+                    Intent intent = new Intent(Intent.ACTION_PICK, null); //请选择文件
+                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*"); //返回结果和标识
+                    startActivityForResult(intent, PHOTO_TK);
                 }
             }
         });
@@ -220,9 +303,15 @@ public class UserMessage extends AppCompatActivity {
                 }
                 if (arg2 == 5) {
                     //打开相册进行选择
+                    /*
                     Intent intent = new Intent("android.intent.action.GET_CONTENT");
                     intent.setType("image/*");
                     startActivityForResult(intent, REQUEST);
+                    */
+                    temp = 2;
+                    Intent intent = new Intent(Intent.ACTION_PICK, null); //请选择文件
+                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*"); //返回结果和标识
+                    startActivityForResult(intent, PHOTO_TK);
                 }
             }
         });
@@ -509,6 +598,110 @@ public class UserMessage extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 裁剪图片的方法.
+     * 用于拍照完成或者选择本地图片之后
+     */
+    private Uri uritempFile;
+
+    public void startPhotoZoom(Uri uri) {
+        Log.e("uri 1 =====", "" + uri);
+        // 解决小米选择相册图片截取照片不进onActivityResult报“保存时发生错误，保存失败”的bug
+        // 小米选择相册时如果不使用系统裁剪，直接压缩不会报这个错误，如果裁剪就会报如上错误。
+        // 需要把URI地址转为图片地址，再包成file文件转为URI
+        if (uri.toString().contains("com.miui.gallery.open")) {
+            uri = getImageContentUri(this, new File(getRealFilePath(this, uri)));
+        }
+        Log.e("uri 2 =====", "" + uri);
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        if (temp == 1) {
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("outputX", 200);
+            intent.putExtra("outputY", 200);
+        } else if (temp == 2) {
+            intent.putExtra("aspectX", 12);
+            intent.putExtra("aspectY", 5);
+            intent.putExtra("outputX", 480);
+            intent.putExtra("outputY", 200);
+        }
+        //uritempFile为Uri类变量，实例化uritempFile
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //开启临时权限
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            //重点:针对7.0以上的操作
+            intent.setClipData(ClipData.newRawUri(MediaStore.EXTRA_OUTPUT, uri));
+            uritempFile = uri;
+        } else {
+            uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
+        startActivityForResult(intent, PHOTO_CLIP);
+    }
+
+    /**
+     * 将URI转为图片的路径
+     *
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getRealFilePath(final Context context, final Uri uri) {
+        if (null == uri)
+            return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null)
+            data = uri.getPath();
+        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
     }
 
 

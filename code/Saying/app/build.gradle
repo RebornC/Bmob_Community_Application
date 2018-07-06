@@ -52,6 +52,8 @@ dependencies {
 
     //导入ImageLoader框架
     compile files('libs/universal-image-loader-1.9.5.jar')
+    //导入Picasso图片加载框架
+    compile 'com.squareup.picasso:picasso:2.5.2'
     //设置圆形头像
     compile 'de.hdodenhof:circleimageview:2.0.0'
 }

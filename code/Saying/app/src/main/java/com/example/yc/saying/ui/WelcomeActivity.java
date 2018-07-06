@@ -1,4 +1,4 @@
-﻿package com.example.yc.saying.ui;
+package com.example.yc.saying.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,3 +52,4 @@ public class WelcomeActivity extends AppCompatActivity {
         timer.schedule(task, 1000 * 2); //2秒后跳转
     }
 }
+
